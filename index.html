@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Wheel</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        flex-direction: column;
+        font-family: Arial, sans-serif;
+        background-color: #ff59c7;
+        margin: 0;
+      }
+      h4 {
+        color: white;
+        font-family: Arial, Helvetica, sans-serif;
+        margin-bottom: 30px;
+        text-align: center;
+      }
+      .wheels-container {
+        display: flex;
+        gap: 50px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .wheel-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      canvas {
+        margin-top: 8px;
+        border-radius: 50%;
+        border: 5px solid white;
+        transition: transform 4s ease-out;
+        transform-origin: center;
+      }
+      .arrow {
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-top: 30px solid white;
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: black;
+        color: #f16c9a;
+        border-color: white;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h4 style="margin-top: 50px; margin-bottom: 75px">
+      Halo..!!! Selamat datang di website daily wheels yang akan membantumu
+      melakukan daily activity. Enjoy your reward, activity, and punishment *.*
+    </h4>
+
+    <div class="wheels-container">
+      <div class="wheel-container">
+        <div class="arrow"></div>
+        <canvas id="wheelCanvas1" width="300" height="300"></canvas>
+        <button class="button" onclick="spinWheel(1)">Reward</button>
+      </div>
+      <div class="wheel-container">
+        <div class="arrow"></div>
+        <canvas id="wheelCanvas2" width="300" height="300"></canvas>
+        <button class="button" onclick="spinWheel(2)">Activity</button>
+      </div>
+      <div class="wheel-container">
+        <div class="arrow"></div>
+        <canvas id="wheelCanvas3" width="300" height="300"></canvas>
+        <button class="button" onclick="spinWheel(3)">Punishment</button>
+      </div>
+      <div class="wheel-container">
+        <div class="arrow"></div>
+        <canvas id="wheelCanvas4" width="300" height="300"></canvas>
+        <button class="button" onclick="spinWheel(4)">Makan</button>
+      </div>
+    </div>
+
+    <script>
+      const activities1 = [
+        "Naicha",
+        "Martabak",
+        "Libur Duolingo",
+        "Full YT",
+        "Makan Pedes",
+        "Cilok",
+        "Seblak",
+        "Risol",
+        "Bebas Seharian",
+        "Batagor",
+        "Full Leyeh2",
+      ];
+      const activities2 = [
+        "Kaca Belakang",
+        "Ruang Depan",
+        "IG Studio",
+        "Ruang Tengah",
+        "TikTok",
+        "File Feed",
+        "Kaca Depan",
+        "Kamar",
+        "Sevenler",
+        "Live",
+        "Toilet",
+        "Pinterest",
+        "Dapur",
+        "Twitter",
+        "Cuci Piring",
+        "Buat Sesuatu",
+      ];
+      const activities3 = [
+        "Threadmill",
+        "No Kopi 3hr",
+        "VT Studio",
+        "Baca Buku",
+        "No Es 3hr",
+        "VT Sevenler",
+        "Full Sesi Duolingo",
+        "No Mie 3hr",
+        "Reels SG",
+        "Try New Things",
+        "Full Makeup 1hr",
+        "Well Dress 1hr",
+        "Dance",
+        "Olahraga",
+      ];
+      const activities4 = [
+        "Mie2an",
+        "Tahu Tek",
+        "Sate",
+        "Geprek",
+        "Mbak Lis",
+        "Toga",
+        "Mak Rumpit",
+        "Rawon",
+        "Pecel",
+        "Bakso",
+        "Nasgor",
+        "Soto",
+      ];
+
+      function drawWheel(canvasId, activities) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        const wheelRadius = canvas.width / 2;
+        const sliceAngle = (2 * Math.PI) / activities.length;
+
+        activities.forEach((activity, i) => {
+          const startAngle = i * sliceAngle;
+          const endAngle = startAngle + sliceAngle;
+
+          // Gambar segmen roda
+          ctx.beginPath();
+          ctx.moveTo(wheelRadius, wheelRadius);
+          ctx.arc(wheelRadius, wheelRadius, wheelRadius, startAngle, endAngle);
+          ctx.closePath();
+          ctx.fillStyle = i % 2 === 0 ? "#ffffff" : "#f16c9a";
+          ctx.fill();
+          ctx.strokeStyle = "white";
+          ctx.stroke();
+
+          // Tambahkan teks pada segmen
+          ctx.save();
+          ctx.translate(wheelRadius, wheelRadius);
+          ctx.rotate(startAngle + sliceAngle / 2);
+          ctx.textAlign = "center";
+          ctx.fillStyle = "black";
+          ctx.font = "bold 13px Arial";
+          ctx.fillText(activity, wheelRadius - 55, 5);
+          ctx.restore();
+        });
+      }
+
+      function spinWheel(wheelNumber) {
+        const canvas = document.getElementById(`wheelCanvas${wheelNumber}`);
+        if (!canvas) return;
+
+        let randomSpin = 3600 + Math.floor(Math.random() * 360); // Putaran besar + random kecil
+        canvas.style.transform = `rotate(${randomSpin}deg)`;
+      }
+
+      // Gambar roda saat halaman dimuat
+      drawWheel("wheelCanvas1", activities1);
+      drawWheel("wheelCanvas2", activities2);
+      drawWheel("wheelCanvas3", activities3);
+      drawWheel("wheelCanvas4", activities4);
+    </script>
+  </body>
+</html>
